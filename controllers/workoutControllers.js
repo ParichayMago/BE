@@ -12,8 +12,8 @@ const getAllWorkouts = async (req, res) => {
 const getWorkout = async (req, res) => {
   const id = req.params.id;
 
-  if(!mongoose.Types.ObjectId.isValid(id)){
-    res.status(404).json({error: "No such workout"})
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "No such workout" });
   }
 
   const workout = await Workout.findById(id);
@@ -37,7 +37,42 @@ const createWorkout = async (req, res) => {
 };
 
 // DELETE A WORKOUT
+const deleteWorkout = async (req, res) => {
+  const id = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "This id dosent exist" });
+  }
+  const workout = await Workout.findOneAndDelete({ _id: id });
+  if (!workout) {
+    return res.status(400).json({ error: "No such workout" });
+  }
+  res.status(200).json(workout);
+};
 
 // UPDATE A WORKOUT
+const updateWorkout = async (req, res) => {
+  const id = req.params.id;
 
-module.exports = { createWorkout, getAllWorkouts, getWorkout };
+  if (!mongoose.Types.ObjectId) {
+    return res.status(404).json({ error: "THE ID IS INCORRECT" });
+  }
+  const workout = await Workout.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+  if (!workout) {
+    return res.status(400).json({ mssg: "this workout dosent exist" });
+  }
+  res.status(200).json(workout);
+};
+
+module.exports = {
+  createWorkout,
+  getAllWorkouts,
+  getWorkout,
+  deleteWorkout,
+  updateWorkout,
+};
