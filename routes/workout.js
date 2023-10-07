@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const Workout = require("../schema/workoutSchema");
 
 // GET all workouts
 router.get("/", (req, res) => {
@@ -11,9 +12,15 @@ router.get("/:id", (req, res) => {
   res.json({ mssg: "GET a single workout" });
 });
 
-// POST WORKOUT TO ALL
-router.post("/", (req, res) => {
-  res.json({ mssg: "POST workout to ALl" });
+// POST A ALL
+router.post("/", async(req, res) => {
+  const { title, load, reps } = req.body;
+  try {
+    const workout = await Workout.create({title, load, reps});
+    res.status(200).json(workout)
+  } catch (error) {
+    res.status(400).json({error: error.message})
+  }
 });
 
 // DELETE A WORKOUT
