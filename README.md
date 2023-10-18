@@ -1,6 +1,6 @@
 # BE
 
-MERN todo app
+MERN W.Out app
 
 BE and FE are divided into two parts
 
